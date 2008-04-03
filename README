@@ -1,2 +1,2 @@
 = encoding/ =
-converting charsets from ISO-2022-JP to UTF-8 in specific channels.
+converting charsets from various charsets to UTF-8 in specific channels.
