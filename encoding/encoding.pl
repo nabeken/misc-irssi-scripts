@@ -1,5 +1,6 @@
-# based on conv.pl
+# based on..
 # http://www.binzume.net/library/irssi.html
+# http://www.irssi.org/scripts/html/charsetwars.pl.html
 
 use Encode;
 use Irssi;
@@ -10,7 +11,7 @@ our %IRSSI   = (
     contact     => 'nabeken@tknetworks.org',
     name        => 'encoding.pl',
     description => 'convert encodings from various charsets to utf-8',
-    license     => 'NYSL',
+    license     => 'public domain',
     changed     => '2008-04-02',
 );
 
