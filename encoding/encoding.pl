@@ -30,7 +30,7 @@ sub send_text {
 		Encode::from_to($text, $local_charset, $target_charset) if defined $target_charset;
 	}
 
-    Irssi::signal_continue( $text, $server, $witem );
+	Irssi::signal_continue( $text, $server, $witem );
 }
 
 Irssi::signal_add( 'send text', 'send_text' );
@@ -40,6 +40,10 @@ sub send_command {
 	my $target_charset = $channelsettings{$item->{name}};
 	Encode::from_to($text, $local_charset, $target_charset) if defined $target_charset;
 	Irssi::signal_continue( $command, $server, $item );
+
+	if (moge) {
+	    moge
+	}
 }
 
 Irssi::signal_add( 'send command', 'send_command' );
