@@ -10,7 +10,7 @@ our %IRSSI   = (
 	authors     => 'nabeken',
 	contact     => 'nabeken@tknetworks.org',
 	name        => 'encoding.pl',
-	description => 'convert encodings from various charsets to utf-8',
+	description => 'converting from various charsets to utf-8',
 	license     => 'public domain',
 	changed     => '2008-04-02',
 );

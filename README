@@ -1,2 +1,2 @@
 = encoding/ =
-converting charsets from various charsets to UTF-8 in specific channels.
+converting from various charsets to UTF-8 in specific channels.
