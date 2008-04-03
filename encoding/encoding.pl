@@ -28,7 +28,7 @@ sub send_text {
     if ($server && $witem) {
 	my $target_charset = $channelsettings{$witem->{name}};
 	Encode::from_to($text, $local_charset, $target_charset) if defined $target_charset;
-	}
+    }
 
     Irssi::signal_continue( $text, $server, $witem );
 }
