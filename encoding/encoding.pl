@@ -26,8 +26,8 @@ sub send_text {
 	my ( $text, $server, $witem ) = @_;
 
 	if ($server && $witem) {
-		my $target_charset = $channelsettings{$witem->{name}};
-		Encode::from_to($text, $local_charset, $target_charset) if defined $target_charset;
+	    my $target_charset = $channelsettings{$witem->{name}};
+	    Encode::from_to($text, $local_charset, $target_charset) if defined $target_charset;
 	}
 
 	Irssi::signal_continue( $text, $server, $witem );
@@ -40,10 +40,6 @@ sub send_command {
 	my $target_charset = $channelsettings{$item->{name}};
 	Encode::from_to($text, $local_charset, $target_charset) if defined $target_charset;
 	Irssi::signal_continue( $command, $server, $item );
-
-	if (moge) {
-	    moge
-	}
 }
 
 Irssi::signal_add( 'send command', 'send_command' );
@@ -65,3 +61,5 @@ sub message_own_public {
 }
 
 Irssi::signal_add('message own_public', 'message_own_public');
+
+# vim: set ts=8 sw=4:
