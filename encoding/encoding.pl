@@ -18,17 +18,17 @@ our %IRSSI   = (
 my $local_charset = 'UTF-8';
 
 my %channelsettings = (
-  '#gentoo-ja' => 'UTF-8',
-  '#testfornabeken' => 'ISO-2022-JP',
+    '#gentoo-ja' => 'UTF-8',
+    '#testfornabeken' => 'ISO-2022-JP',
 );
 
 sub send_text {
     my ( $text, $server, $witem ) = @_;
 
     if ($server && $witem) {
-        my $target_charset = $channelsettings{$witem->{name}};
+	my $target_charset = $channelsettings{$witem->{name}};
 	Encode::from_to($text, $local_charset, $target_charset) if defined $target_charset;
-    }
+	}
 
     Irssi::signal_continue( $text, $server, $witem );
 }
