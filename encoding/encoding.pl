@@ -46,7 +46,6 @@ sub message_public {
     my ($server, $msg, $nick, $addr, $target) = @_;
     my $target_charset = $channelsettings{$target};
     Encode::from_to($msg, $target_charset, $local_charset) if defined $target_charset;
-;
     Irssi::signal_continue($server, $msg, $nick, $addr, $target);
 }
 Irssi::signal_add('message public', 'message_public');
@@ -55,7 +54,6 @@ sub message_own_public {
     my ($server, $msg, $target) = @_;
     my $target_charset = $channelsettings{$target};
     Encode::from_to($msg, $target_charset, $local_charset) if defined $target_charset;
-;
     Irssi::signal_continue($server, $msg, $target);
 }
 Irssi::signal_add('message own_public', 'message_own_public');
