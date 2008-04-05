@@ -101,4 +101,17 @@ sub message_join {
 }
 Irssi::signal_add('message join', 'message_join');
 
+sub event_misc {
+    my ($server, $data, $nick, $addr) = @_;
+    my ($chan, $topic) = split(/ :/, $data, 2);
+    my $target_charset = $channelsettings_reverse{$chan};
+    Encode::from_to($chan, $target_charset, $local_charset);
+    Encode::from_to($topic, $target_charset, $local_charset);
+    $data = "$chan :$topic";
+    Irssi::signal_continue($server, $data, $nick, $addr);
+}
+Irssi::signal_add_first('event topic', 'event_misc');
+Irssi::signal_add_first('event 332', 'event_misc'); # 332 = event_topic_get / cf. src/irc/core/channel-events.c
+Irssi::signal_add_first('event 333', 'event_misc'); # 333 = event_topic_info / see also above code.
+
 # vim: set ts=8 sw=4:
