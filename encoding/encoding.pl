@@ -100,18 +100,53 @@ sub message_join {
     Irssi::signal_continue($server, $chan, $nick, $addr);
 }
 Irssi::signal_add('message join', 'message_join');
+Irssi::signal_add('message part', 'message_join'); #TODO including reasons
 
-sub event_misc {
+sub event_topic {
     my ($server, $data, $nick, $addr) = @_;
     my ($chan, $topic) = split(/ :/, $data, 2);
     my $target_charset = $channelsettings_reverse{$chan};
-    Encode::from_to($chan, $target_charset, $local_charset);
-    Encode::from_to($topic, $target_charset, $local_charset);
+    Encode::from_to($chan, $target_charset, $local_charset) if defined $target_charset;
+    Encode::from_to($topic, $target_charset, $local_charset) if defined $target_charset;
     $data = "$chan :$topic";
     Irssi::signal_continue($server, $data, $nick, $addr);
 }
-Irssi::signal_add_first('event topic', 'event_misc');
-Irssi::signal_add_first('event 332', 'event_misc'); # 332 = event_topic_get / cf. src/irc/core/channel-events.c
-Irssi::signal_add_first('event 333', 'event_misc'); # 333 = event_topic_info / see also above code.
+
+sub event_332 {
+    my ($server, $data, $nick, $addr) = @_;
+    $data =~ /^(.*) (.*) :(.*)/;
+    my ($nick, $chan, $topic) = ($1, $2, $3);
+    my $target_charset = $channelsettings_reverse{$chan};
+    Encode::from_to($chan, $target_charset, $local_charset) if defined $target_charset;
+    Encode::from_to($topic, $target_charset, $local_charset) if defined $target_charset;
+    $data = "$chan :$topic";
+    Irssi::signal_continue($server, $data, $nick, $addr);
+}
+
+sub event_333 {
+    Irssi::print "event: 333";
+    my ($server, $data, $nick, $addr) = @_;
+    Irssi::print "event: 333 / $data";
+    my ($chan, $topic) = split(/ :/, $data, 2);
+    my $target_charset = $channelsettings_reverse{$chan};
+    Encode::from_to($chan, $target_charset, $local_charset) if defined $target_charset;
+    Encode::from_to($topic, $target_charset, $local_charset) if defined $target_charset;
+    $data = "$chan :$topic";
+    Irssi::signal_continue($server, $data, $nick, $addr);
+}
+Irssi::signal_add_first('event topic', 'event_topic');
+Irssi::signal_add_first('event 332', 'event_332'); # 332 = event_topic_get / cf. src/irc/core/channel-events.c
+#Irssi::signal_add_first('event 333', 'event_333');
+# 333 = event_topic_info (Topic set by foobar) / see also above code.
+
+sub event_353 {
+    my ($server, $data) = @_;
+    $data =~ /^(?:.*) = (.*) :.*/;
+    my $chan = $1;
+    my $target_charset = $channelsettings_reverse{$chan};
+    Encode::from_to($data, $target_charset, $local_charset);
+    Irssi::signal_continue($server, $data);
+}
+Irssi::signal_add_first('event 353', 'event_353'); #FIXME: printing twice..
 
 # vim: set ts=8 sw=4:
