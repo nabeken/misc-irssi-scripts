@@ -60,14 +60,6 @@ sub send_command {
 }
 Irssi::signal_add('send command', 'send_command');
 
-sub channel_created {
-    my ($chan, $auto) = @_;
-    my $target_charset = $channelsettings_reverse{$chan->{name}};
-    Encode::from_to($chan->{name}, $target_charset, $local_charset);
-    Irssi::signal_continue($chan, $auto);
-}
-Irssi::signal_add('channel created', 'channel_created');
-
 sub message_public {
     my ($server, $msg, $nick, $addr, $target) = @_;
     my $target_charset = $channelsettings_reverse{$target};
@@ -96,8 +88,17 @@ sub message_topic {
     my ($server, $chan, $topic, $nick, $addr) = @_;
     my $target_charset = $channelsettings_reverse{$chan};
     Encode::from_to($topic, $target_charset, $local_charset) if defined $target_charset;
+    Encode::from_to($chan, $target_charset, $local_charset) if defined $target_charset;
     Irssi::signal_continue($server, $chan, $topic, $nick, $addr);
 }
 Irssi::signal_add('message topic', 'message_topic');
+
+sub message_join {
+    my ($server, $chan, $nick, $addr) = @_;
+    my $target_charset = $channelsettings_reverse{$chan};
+    Encode::from_to($chan, $target_charset, $local_charset) if defined $target_charset;
+    Irssi::signal_continue($server, $chan, $nick, $addr);
+}
+Irssi::signal_add('message join', 'message_join');
 
 # vim: set ts=8 sw=4:
